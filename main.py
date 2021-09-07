@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from bottle import route, run, template, debug, request
+from bottle import abort, route, run, template, debug, request
 import pymongo
 
 mongoclient = pymongo.MongoClient('localhost', 27017)
@@ -12,7 +12,10 @@ def post(name):
     '''
     Get post
     '''
-    return posts.find_one({'name':name})['text']
+    try:
+        return posts.find_one({'name':name})['text']
+    except TypeError:
+        return abort(404, 'No such page')
 
 
 @route('/post/<name>', method='POST')
@@ -52,7 +55,10 @@ def all_posts():
 
 @route('/')
 def index():
-    return "Hello"
+    try:
+        return posts.find_one({'name':'/'})['text']
+    except TypeError:
+        return abort(404, 'No such page')
 
 
 if __name__ == '__main__':

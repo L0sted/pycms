@@ -60,6 +60,20 @@ def index():
     except TypeError:
         return abort(404, 'No such page')
 
+@route('/', method='POST')
+def post():
+    '''
+    Insert/Update post
+    '''
+    body = request.forms.get('body')
+    # If post exists, update it
+    if posts.find_one({'name': '/'}):
+        newPost = {'$set': {'text': body}}
+        return str(posts.update_one({'name': '/'}, newPost))
+    # Else - create new
+    else:
+        newPost = {'name': '/', 'text': body}
+        return str(posts.insert_one(newPost).inserted_id)
 
 if __name__ == '__main__':
     run(host='0.0.0.0', port=8081, reloader=True, debug=True)

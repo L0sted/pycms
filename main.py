@@ -7,9 +7,6 @@ database = mongoclient['pycms']
 posts = database['posts']
 
 
-# /post [GET]
-
-
 @route('/post/<name>')
 def post(name):
     '''
@@ -58,5 +55,5 @@ def index():
     return "Hello"
 
 
-# if __name__ == __main__:
-run(host='0.0.0.0', port=8081, reloader=True, debug=True)
+if __name__ == '__main__':
+    run(host='0.0.0.0', port=8081, reloader=True, debug=True)

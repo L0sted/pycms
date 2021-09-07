@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 from bottle import route, run, template, debug, request
-import json
-import os
+import pymongo
 
-database = dict(posts=dict(sdf='hello'))
+mongoclient = pymongo.MongoClient('localhost', 27017)
+database = mongoclient['pycms']
+posts = database['posts']
 
 
 # /post [GET]
@@ -11,31 +12,36 @@ database = dict(posts=dict(sdf='hello'))
 
 @route('/post/<name>')
 def post(name):
-    # return template('<b>Hello {{name}}</b>!', name=database['posts'][name])
-    return database['posts'][name]
+    return posts.find_one({'name':name})['text']
 
-# /post POST
+# /post [POST]
 
 
 @route('/post/<name>', method='POST')
 def post(name):
     body = request.forms.get('body')
-    newPost = {name: body}
-    return database['posts'].update(newPost)
+    # If post exists, update it
+    if posts.find_one({'name': name}):
+        newPost = {'$set': {'text': body}}
+        return str(posts.update_one({'name': name}, newPost))
+    # Else - create new
+    else:
+        newPost = {'name': name, 'text': body}
+        return str(posts.insert_one(newPost).inserted_id)
 
 
 # /post [DELETE]
 
 @route('/post/<name>', method='DELETE')
 def post(name):
-    return database['posts'].pop(name)
+    return str(posts.delete_one({'name':name}))
 
 # /debug (database)
 
 
 @route('/debug')
 def debug():
-    return database
+    return type(posts)
 
 
 @route('/')

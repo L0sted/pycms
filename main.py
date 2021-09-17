@@ -30,7 +30,8 @@ class Config:
         """
         import configparser
         config = configparser.ConfigParser()
-        config.read('config.ini')
+        if not config.read('config.ini'):
+            self.createConfig(config)
 
         db = config['DB']
 
@@ -38,11 +39,18 @@ class Config:
         self.port = int(db['port'])
         self.dbname = db['name']
 
-    def createConfig(self):
+    def createConfig(self, config):
         """
         Create config file
         """
-        pass
+        config['DB'] = {}
+        db = config['DB']
+        db['host'] = 'localhost'
+        db['port'] = '27017'
+        db['name'] = 'pycms'
+
+        with open('config.ini', 'w') as cfgfile:
+            config.write(cfgfile)
 
 
 class Back():

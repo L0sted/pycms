@@ -15,18 +15,30 @@ class Config:
         """
         Init init
         """
-        mongoclient = pymongo.MongoClient('localhost', 27017)
-        database = mongoclient['pycms']
+        self.readConfig()
+
+        mongoclient = pymongo.MongoClient(self.host, self.port)
+        database = mongoclient[self.dbname]
+
+        # TODO: Create table if not exists
         posts = database['posts']
         self.posts = posts
 
-    def readConfig():
+    def readConfig(self):
         """
         Read config file, if not exists - call Init.createConfig()
         """
-        pass
+        import configparser
+        config = configparser.ConfigParser()
+        config.read('config.ini')
 
-    def createConfig():
+        db = config['DB']
+
+        self.host = db['host']
+        self.port = int(db['port'])
+        self.dbname = db['name']
+
+    def createConfig(self):
         """
         Create config file
         """

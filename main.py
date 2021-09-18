@@ -86,7 +86,7 @@ class Back():
             return str(posts.insert_one(newPost).inserted_id)
 
     def deletePost(self, name):
-        return posts.delete_one({'name': name})
+        return bool(posts.delete_one({'name': name}).deleted_count)
 
 
 @route('/post/<name>')
@@ -97,7 +97,7 @@ def post(name):
     return str(back.getPost(name))
 
 
-@route('/post/<name>', method='POST')
+@route('/admin/post/<name>', method='POST')
 def postUpd(name):
     '''
     Insert/Update post
@@ -106,12 +106,11 @@ def postUpd(name):
     return back.updatePost(name=name, body=body)
 
 
-@route('/post/<name>', method='DELETE')
+@route('/admin/post/<name>', method='DELETE')
 def postDel(name):
     '''
     Delete post by name
     '''
-    # return str(posts.delete_one({'name':name}))
     return str(back.deletePost(name))
 
 

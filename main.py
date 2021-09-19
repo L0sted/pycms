@@ -2,18 +2,23 @@
 from bottle import abort, route, run, request
 import pymongo
 
+# TODO: auth to /admin
+# TODO: timestamps to posts
+# TODO: author to posts and multiple users
+
 
 class Config:
     """
-    posts - public, posts table from MongoClient
-    config: private, config for DB
-        config.db.host
-        config.db.port
-        config.db.dbname
+    posts - table with posts
+    config structure:
+        DB:
+            - host
+            - port
+            - dbname
     """
     def __init__(self):
         """
-        Init init
+        Init config
         """
         self.readConfig()
 
@@ -26,7 +31,7 @@ class Config:
 
     def readConfig(self):
         """
-        Read config file, if not exists - call Init.createConfig()
+        Read config file, if not exists - call self.createConfig()
         """
         import configparser
         config = configparser.ConfigParser()
@@ -70,12 +75,15 @@ class Back():
             return abort(404, 'No such page')
 
     def getAllPosts(self):
+        # TODO: clear up output, remove '_id' and 'body',
+        # now there should be only
         dict_posts = list()
         for i in posts.find():
             dict_posts.append(i)
         return str(dict_posts)
 
     def updatePost(self, name, body):
+        # TODO: return RESTful error/success result
         # If post exists, update it
         if posts.find_one({'name': name}):
             newPost = {'$set': {'text': body}}
@@ -86,6 +94,7 @@ class Back():
             return str(posts.insert_one(newPost).inserted_id)
 
     def deletePost(self, name):
+        # TODO: return RESTful error/success result
         return bool(posts.delete_one({'name': name}).deleted_count)
 
 

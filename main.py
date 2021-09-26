@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from bottle import abort, route, run, request
 import pymongo
-
+import time
 # TODO: auth to /admin
 # TODO: timestamps to posts
 # TODO: author to posts and multiple users
@@ -95,7 +95,8 @@ class Back():
             return str(posts.update_one({'name': name}, newPost))
         # Else - create new
         else:
-            newPost = {'name': name, 'text': body}
+            newPost = {'name': name, 'text': body,
+                       'create_timestamp': str(time.time())}
             return str(posts.insert_one(newPost).inserted_id)
 
     def deletePost(self, name):

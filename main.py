@@ -5,6 +5,7 @@ import pymongo
 # TODO: auth to /admin
 # TODO: timestamps to posts
 # TODO: author to posts and multiple users
+# TODO: add bottle's params to config
 
 
 class Config:
@@ -23,9 +24,13 @@ class Config:
         self.readConfig()
 
         mongoclient = pymongo.MongoClient(self.host, self.port)
+        if self.dbname not in mongoclient.list_database_names():
+            print('DB not found, creating')
         database = mongoclient[self.dbname]
 
         # TODO: Create table if not exists
+        if 'posts' not in database.list_collection_names():
+            print('Table not fount, creating')
         posts = database['posts']
         self.posts = posts
 

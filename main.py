@@ -143,7 +143,9 @@ def index():
 
 
 if __name__ == '__main__':
+    print("Init")
     cfg = Config()
+    print("Configured")
     back = Back()
     posts = cfg.posts
-    run(host='0.0.0.0', port=8081, reloader=True, debug=True)
+    run(host='0.0.0.0', port=8080, reloader=True, debug=True)

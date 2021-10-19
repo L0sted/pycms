@@ -4,6 +4,7 @@ name: default
 
 steps:
   - name: greets
+    image: python
     commands:
       - docker build .
 

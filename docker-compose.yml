@@ -10,3 +10,9 @@ services:
                         - db
         db:
                 image: mongo
+        tests:
+                build: .
+                command: bash ./test.sh
+                depends_on:
+                        - db
+                        - server

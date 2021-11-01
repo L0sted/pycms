@@ -104,6 +104,16 @@ class Back():
         return bool(posts.delete_one({'name': name}).deleted_count)
 
 
+class Metrics:
+    def alive():
+        return str("alive 1")
+
+
+@route('/metrics')
+def metrics():
+    return Metrics.alive()
+
+
 @route('/post/<name>')
 def post(name):
     '''

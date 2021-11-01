@@ -38,6 +38,7 @@ class Config:
         """
         Read config file, if not exists - call self.createConfig()
         """
+        # TODO: Досоздавать недостающие ключи
         import configparser
         config = configparser.ConfigParser()
         if not config.read('config.ini'):

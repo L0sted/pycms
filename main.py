@@ -44,10 +44,14 @@ class Config:
             self.createConfig(config)
 
         db = config['DB']
-
         self.host = db['host']
         self.port = int(db['port'])
         self.dbname = db['name']
+
+        app = config['App']
+        self.apphost = app['host']
+        self.appport = int(app['port'])
+        self.appdebug = bool(app['debug'])
 
     def createConfig(self, config):
         """
@@ -58,6 +62,12 @@ class Config:
         db['host'] = 'localhost'
         db['port'] = '27017'
         db['name'] = 'pycms'
+
+        config['App'] = {}
+        app = config['App']
+        app['port'] = '8080'
+        app['debug'] = 'True'
+        app['host'] = '0.0.0.0'
 
         with open('config.ini', 'w') as cfgfile:
             config.write(cfgfile)
@@ -158,4 +168,4 @@ if __name__ == '__main__':
     print("Configured")
     back = Back()
     posts = cfg.posts
-    run(host='0.0.0.0', port=8080, reloader=True, debug=True)
+    run(host=cfg.apphost, port=cfg.appport, reloader=cfg.appdebug, debug=cfg.appdebug)

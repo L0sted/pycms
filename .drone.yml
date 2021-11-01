@@ -1,20 +1,22 @@
 kind: pipeline
 type: exec
-name: default
-
-platform:
-  os: linux
-  arch: amd64
+name: build
 
 steps:
   - name: build
     commands:
       - docker-compose -p pycms build 
+
   - name: test
     commands:
       - docker-compose -p pycms up --build --abort-on-container-exit
+
+  - name: push
+    commands:
+      - docker-compose -p pycms push
   - name: run
     commands:
+      - docker-compose -p pycms down 
       - docker-compose -p pycms up -d
 
 

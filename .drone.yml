@@ -26,6 +26,7 @@ steps:
       - docker-compose -p pycms push
   - name: run
     commands:
+      - docker-compose -p pycms down 
       - docker-compose -p pycms up -d
 
 

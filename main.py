@@ -16,6 +16,10 @@ class Config:
             - host
             - port
             - dbname
+        App:
+            - host
+            - port
+            - debug
     """
     def __init__(self):
         """
@@ -28,9 +32,8 @@ class Config:
             print('DB not found, creating')
         database = mongoclient[self.dbname]
 
-        # TODO: Create table if not exists
         if 'posts' not in database.list_collection_names():
-            print('Table not fount, creating')
+            print('Table not found, creating')
         posts = database['posts']
         self.posts = posts
 

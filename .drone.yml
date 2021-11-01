@@ -7,20 +7,10 @@ steps:
     commands:
       - docker-compose -p pycms build 
 
----
-kind: pipeline
-type: exec
-name: test
-steps:
   - name: test
     commands:
       - docker-compose -p pycms up --build --abort-on-container-exit
 
----
-kind: pipeline
-type: exec
-name: run and push
-steps:
   - name: push
     commands:
       - docker-compose -p pycms push

@@ -101,19 +101,22 @@ class Back():
         return str(dict_posts)
 
     def updatePost(self, name, body):
-        # TODO: return RESTful error/success result
         # If post exists, update it
         if posts.find_one({'name': name}):
-            newPost = {'$set': {'text': body}}
-            return str(posts.update_one({'name': name}, newPost))
+            newPostJson = {'$set': {'text': body}}
+            newPost = posts.update_one({'name': name}, newPostJson)
+            result = dict(
+                status=200, state='updated', count=newPost.matched_count
+            )
         # Else - create new
         else:
-            newPost = {'name': name, 'text': body,
-                       'create_timestamp': str(time.time())}
-            return str(posts.insert_one(newPost).inserted_id)
+            newPostJson = {'name': name, 'text': body,
+                           'create_timestamp': str(time.time())}
+            newPost = posts.insert_one(newPost).inserted_id
+            result = dict(status=200, state='new')
+        return str(result)
 
     def deletePost(self, name):
-        # TODO: return RESTful error/success result
         delete = posts.delete_one({'name': name}).deleted_count
         if not delete:
             result = dict(status=500, count=delete)

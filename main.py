@@ -114,7 +114,12 @@ class Back():
 
     def deletePost(self, name):
         # TODO: return RESTful error/success result
-        return bool(posts.delete_one({'name': name}).deleted_count)
+        delete = posts.delete_one({'name': name}).deleted_count
+        if not delete:
+            result = dict(status=500, count=delete)
+        else:
+            result = dict(status=200, count=delete)
+        return str(result)
 
 
 class Metrics:

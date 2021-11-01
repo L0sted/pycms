@@ -1,5 +1,6 @@
 #!/bin/bash
-curl_cmd='curl -s -w "%{http_code}" -o /dev/null'
+curl_cmd='curl -w :%{http_code}'
+#curl_cmd='curl -s -w "%{http_code}\t%{stdout}" -o /dev/null'
 url='server:8080'
 $curl_cmd -X POST $url/admin/post/test -F 'body=testpage' && echo ": Create success" || echo ': create fail'
 

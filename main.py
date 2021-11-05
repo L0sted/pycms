@@ -112,7 +112,7 @@ class Back():
         else:
             newPostJson = {'name': name, 'text': body,
                            'create_timestamp': str(time.time())}
-            newPost = posts.insert_one(newPost).inserted_id
+            newPost = posts.insert_one(newPostJson).inserted_id
             result = dict(status=200, state='new')
         return str(result)
 

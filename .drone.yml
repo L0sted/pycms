@@ -9,17 +9,17 @@ steps:
       - docker-compose -p pycms push
 
 ---
-kind: pipeline
-type: docker
 name: test
-
+type: docker
+kind: pipeline
 steps:
-  - name: run db
-    image: mongo
+    - name: run db
+      image: mongo
+      detach: true
 
-  - name: run_tests
-    image: pycms_server
-    commands:
-      - bash ./test.sh
-    depends_on:
-      - "run db"
+    - name: run_tests
+      image: pycms_server
+      commands:
+        - bash ./test.sh
+depends_on:
+  - build

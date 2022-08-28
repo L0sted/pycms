@@ -5,18 +5,21 @@ name: build
 steps:
   - name: build
     commands:
-      - docker-compose -p pycms build 
-
-  - name: test
-    commands:
-      - docker-compose -p pycms up --build --abort-on-container-exit
-
-  - name: push
-    commands:
+      - docker-compose -p pycms build
       - docker-compose -p pycms push
-  - name: run
+
+---
+kind: pipeline
+type: docker
+name: test
+
+steps:
+  - name: run db
+    image: mongo
+
+  - name: run_tests
+    image: pycms_server
     commands:
-      - docker-compose -p pycms down 
-      - docker-compose -p pycms up -d
-
-
+      - bash ./test.sh
+    depends_on:
+      - "run db"
